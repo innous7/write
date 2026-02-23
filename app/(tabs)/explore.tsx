@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Pressable, ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import { ThemeToggle } from '@/components/theme-toggle';
 import { ThemedText } from '@/components/themed-text';
@@ -64,7 +64,7 @@ export default function ExploreScreen() {
           </View>
         </View>
 
-        <View style={[styles.mainGrid, isDesktop && styles.mainGridDesktop]}>
+        <View style={styles.mainGrid}>
           <View style={styles.mainCol}>
             <View style={[styles.panel, { backgroundColor: palette.surface, borderColor: palette.border }]}>
               <ThemedText style={styles.panelTitle}>Synopsis</ThemedText>
@@ -127,28 +127,6 @@ export default function ExploreScreen() {
             </View>
 
           </View>
-
-          {isDesktop ? (
-            <View style={styles.sideCol}>
-              <View style={[styles.sidePanel, { backgroundColor: palette.surface, borderColor: palette.border }]}>
-                <ThemedText type="defaultSemiBold">작가 응원</ThemedText>
-                <ThemedText style={styles.sideText}>작품이 마음에 들면 응원하기로 다음 시즌 제작을 지원하세요.</ThemedText>
-                <Pressable style={styles.supportBtn}>
-                  <ThemedText style={styles.supportBtnText}>응원하기</ThemedText>
-                </Pressable>
-              </View>
-
-              <View style={[styles.sidePanel, { backgroundColor: palette.surface, borderColor: palette.border }]}>
-                <ThemedText type="defaultSemiBold">비슷한 작품</ThemedText>
-                {['프로젝트 매니저', '분기 실적의 밤', '오피스 시그널'].map((title) => (
-                  <Pressable key={title} style={styles.similarItem}>
-                    <ThemedText style={styles.similarTitle}>{title}</ThemedText>
-                    <ThemedText style={styles.similarMeta}>기업/드라마</ThemedText>
-                  </Pressable>
-                ))}
-              </View>
-            </View>
-          ) : null}
         </View>
 
         <View style={[styles.footer, { borderColor: palette.border }]}>
@@ -253,11 +231,6 @@ const styles = StyleSheet.create({
   mainGrid: {
     gap: 12,
   },
-  mainGridDesktop: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 16,
-  },
   mainCol: {
     flex: 1,
     gap: 12,
@@ -343,46 +316,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     opacity: 0.72,
-  },
-  sideCol: {
-    width: 320,
-    gap: 10,
-  },
-  sidePanel: {
-    borderWidth: 1,
-    borderRadius: designTokens.radius.lg,
-    padding: 12,
-    gap: 8,
-  },
-  sideText: {
-    lineHeight: 21,
-    opacity: 0.82,
-    fontSize: 13,
-  },
-  supportBtn: {
-    marginTop: 4,
-    minHeight: 42,
-    borderRadius: designTokens.radius.sm,
-    backgroundColor: '#FACC15',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  supportBtnText: {
-    color: '#111827',
-    fontWeight: '800',
-  },
-  similarItem: {
-    borderTopWidth: 1,
-    borderTopColor: '#E2E8F0',
-    paddingTop: 8,
-    gap: 2,
-  },
-  similarTitle: {
-    fontWeight: '700',
-  },
-  similarMeta: {
-    fontSize: 12,
-    opacity: 0.65,
   },
   footer: {
     borderTopWidth: 1,
