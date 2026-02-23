@@ -1,53 +1,75 @@
-> Edited for use in IDX on 07/09/12
+# Expo (React Native) Web + App Deployment Guide
 
-# Welcome to your Expo app 👋
+이 프로젝트는 하나의 코드베이스로 `Web + iOS + Android`를 함께 운영하도록 구성되어 있습니다.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 1) 로컬 실행
 
-## Get started
+- 모바일 개발 서버: `npm run start`
+- Android 실행: `npm run android`
+- iOS 실행: `npm run ios`
+- 웹 실행: `npm run web`
 
-#### Android
+## 2) 사전 설정
 
-Android previews are defined as a `workspace.onStart` hook and started as a vscode task when the workspace is opened/started.
+### Firebase
 
-Note, if you can't find the task, either:
-- Rebuild the environment (using command palette: `IDX: Rebuild Environment`), or
-- Run `npm run android -- --tunnel` command manually run android and see the output in your terminal. The device should pick up this new command and switch to start displaying the output from it.
-
-In the output of this command/task, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You'll also find options to open the app's developer menu, reload the app, and more.
-
-#### Web
-
-Web previews will be started and managred automatically. Use the toolbar to manually refresh.
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+1. Firebase 프로젝트 생성
+2. `.firebaserc`의 `YOUR_FIREBASE_PROJECT_ID`를 실제 프로젝트 ID로 변경
+3. Firebase 로그인
 
 ```bash
-npm run reset-project
+npx firebase-tools login
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Expo / EAS
 
-## Learn more
+1. Expo 로그인
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+npx eas-cli login
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+2. `app.json`에 실제 앱 식별자 설정
+- iOS: `expo.ios.bundleIdentifier` (예: `com.yourname.write`)
+- Android: `expo.android.package` (예: `com.yourname.write`)
 
-## Join the community
+## 3) 웹 배포 (Firebase Hosting)
 
-Join our community of developers creating universal apps.
+웹 정적 빌드:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npm run build:web
+```
+
+Firebase Hosting 배포:
+
+```bash
+npm run deploy:web
+```
+
+프리뷰 채널 배포:
+
+```bash
+npm run deploy:web:preview
+```
+
+## 4) 앱 배포 (EAS Build)
+
+Android 프로덕션 빌드:
+
+```bash
+npm run eas:build:android
+```
+
+iOS 프로덕션 빌드:
+
+```bash
+npm run eas:build:ios
+```
+
+필요하면 빌드 완료 후 EAS Submit으로 스토어 제출을 연결하세요.
+
+## 5) 추가 메모
+
+- 웹 배포 결과물은 `dist/` 디렉터리입니다.
+- 네이티브 전용 기능(카메라/푸시 등)은 웹에서 분기 처리가 필요할 수 있습니다.
