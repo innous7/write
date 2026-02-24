@@ -16,6 +16,21 @@ function estimateReadMinutes(text: string) {
   return Math.max(3, Math.round(chars / 350));
 }
 
+function getPublicEpisodeBody(text: string) {
+  const markers = ['\n## 공통 대사 고정본', '\n## 다음 화 연결 포인트'];
+  let cutIndex = text.length;
+
+  for (const marker of markers) {
+    const idx = text.indexOf(marker);
+    if (idx !== -1 && idx < cutIndex) {
+      cutIndex = idx;
+    }
+  }
+
+  const publicBody = text.slice(0, cutIndex).replace(/\n---\s*$/, '');
+  return publicBody.trimEnd();
+}
+
 export default function NovelEpisodeScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ character: string; episode: string }>();
@@ -43,6 +58,7 @@ export default function NovelEpisodeScreen() {
 
   const prevEpisode = allEpisodes.find((item) => item.number === episode.number - 1);
   const nextEpisode = allEpisodes.find((item) => item.number === episode.number + 1);
+  const publicBody = getPublicEpisodeBody(episode.body);
 
   return (
     <View style={[styles.screen, { backgroundColor: palette.bg }]}>
@@ -107,13 +123,13 @@ export default function NovelEpisodeScreen() {
               </View>
               <View style={styles.metaItem}>
                 <ThemedText style={styles.metaEmoji}>⏱️</ThemedText>
-                <ThemedText style={styles.metaText}>{estimateReadMinutes(episode.body)}분 읽기</ThemedText>
+                <ThemedText style={styles.metaText}>{estimateReadMinutes(publicBody)}분 읽기</ThemedText>
               </View>
             </View>
           </View>
 
           <View style={[styles.articleCard, { backgroundColor: palette.surface, borderColor: palette.border }]}>
-            <ThemedText style={styles.articleText}>{episode.body}</ThemedText>
+            <ThemedText style={styles.articleText}>{publicBody}</ThemedText>
           </View>
         </ScrollView>
 
